@@ -2,74 +2,109 @@ package com.Spring_Boot_MVC_CRUD.SpringBoot_MVC_CRUD.Controllers;
 
 import com.Spring_Boot_MVC_CRUD.SpringBoot_MVC_CRUD.Entities.Student;
 import com.Spring_Boot_MVC_CRUD.SpringBoot_MVC_CRUD.Services.StudentService;
+import jakarta.validation.Valid;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
+@RequestMapping("/students")
 public class StudentRestController {
     private StudentService studentService;
 
     public StudentRestController(StudentService studentService){
         this.studentService=studentService;
     }
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder){
+        StringTrimmerEditor stringTrimmerEditor=new StringTrimmerEditor(true);
+        webDataBinder.registerCustomEditor(String.class,stringTrimmerEditor);
+    }
+
     //Create/Insert
-    @PostMapping("/students")
-    public Student addStudent(@RequestBody Student student){
+    @PostMapping("/save")
+    public String addStudent(@Valid @ModelAttribute("student") Student student, BindingResult bindingResult){
         System.out.println(student);
         Student stu=null;
+        if(bindingResult.hasErrors()){
+//            theModel.addAttribute("student",student);
+            System.out.println(bindingResult.toString());
+            return "Student/show-registration";
+        }
         try{
             stu=studentService.saveStudent(student);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-        return stu;
+        return "redirect:student-list";
     }
+    @PostMapping("/save-update")
+    public String saveUpdateStudent(@Valid @ModelAttribute("student") Student student, BindingResult bindingResult){
+        System.out.println(student);
+        Student stu=null;
+        if(bindingResult.hasErrors()){
+//            theModel.addAttribute("student",student);
+            System.out.println(bindingResult.toString());
+            return "Student/update-details";
+        }
+        try{
+            stu=studentService.saveStudent(student);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return "redirect:student-list";
+    }
+
     //Retrieve
-    @GetMapping("/students")
-    public List<Student> retrieveStudents(){
+    @GetMapping("/student-list")
+    public String retrieveStudents(Model theModel){
         List<Student> studentList=null;
         try{
             studentList=studentService.findAllStudents();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-        return studentList;
+
+        //adding StudentList to the Model
+        theModel.addAttribute("studentList",studentList);
+        return "Student/student-list";
     }
 
-    @GetMapping("/students/{studentId}")
-    public Student findById(@PathVariable Integer studentId){
-        Student student=null;
-        try{
-            student=studentService.findById(studentId);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        if(student!=null){
-            return student;
-        }
-        return student;
+    @GetMapping("/show-registration")
+    public String showRegistrationForm(Model theModel){
+        //Creating an instance of Student Object
+        Student student=new Student();
+        //Adding instance to Model
+        theModel.addAttribute("student",student);
+        return "Student/show-registration";
     }
+
     //Update/Modify
-    @PutMapping("/students")
-    public Student updateStudent(@RequestBody Student student){
-        Student stu=null;
-        try{
-            stu=studentService.saveStudent(student);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        return stu;
+    @GetMapping("/update")
+    public String updateStudentDetails(@RequestParam("studentId") Integer studentId,Model theModel){
+        Student student=studentService.findById(studentId);
+        //Adding student instance to the Model.
+        theModel.addAttribute("student",student);
+        return "Student/update-details";
     }
+
 
     //Delete
-    @DeleteMapping("/students/{studentId}")
-    public void deleteStudent(@PathVariable Integer studentId){
+    @GetMapping("/delete/{studentId}")
+    public String  deleteStudent(@PathVariable Integer studentId){
         try{
+            System.out.println("Student to be deleted-->"+studentId);
             studentService.deleteStudent(studentId);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+        return "redirect:/students/student-list";
     }
 
 }

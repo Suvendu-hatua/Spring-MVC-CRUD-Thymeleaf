@@ -1,10 +1,7 @@
 package com.Spring_Boot_MVC_CRUD.SpringBoot_MVC_CRUD.Entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 
 @Entity()
@@ -27,6 +24,9 @@ public class Student {
     @NotBlank(message = "is required!")
     @Email()
     private String email;
+
+    @AssertTrue(message = "You must agree terms and conditions.")
+    private boolean agreedToTerms=false;
 
     public Integer getStudentId() {
         return studentId;
@@ -58,6 +58,15 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @AssertTrue(message = "You must agree terms and conditions.")
+    public boolean isAgreedToTerms() {
+        return agreedToTerms;
+    }
+
+    public void setAgreedToTerms(boolean agreedToTerms) {
+        this.agreedToTerms = agreedToTerms;
     }
 
     //Overriding toString() method
