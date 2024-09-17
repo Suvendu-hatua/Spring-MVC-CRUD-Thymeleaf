@@ -3,6 +3,7 @@ package com.Spring_Boot_MVC_CRUD.SpringBoot_MVC_CRUD.Controllers;
 import com.Spring_Boot_MVC_CRUD.SpringBoot_MVC_CRUD.Entities.Student;
 import com.Spring_Boot_MVC_CRUD.SpringBoot_MVC_CRUD.Services.StudentService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,10 @@ import java.util.List;
 public class StudentRestController {
     private StudentService studentService;
 
+    //Reading countries from application.properties file
+    @Value("${countries}")
+    List<String> countryList;
+
     public StudentRestController(StudentService studentService){
         this.studentService=studentService;
     }
@@ -29,12 +34,14 @@ public class StudentRestController {
 
     //Create/Insert
     @PostMapping("/save")
-    public String addStudent(@Valid @ModelAttribute("student") Student student, BindingResult bindingResult){
+    public String addStudent(@Valid @ModelAttribute("student") Student student, BindingResult bindingResult,Model theModel){
         System.out.println(student);
         Student stu=null;
         if(bindingResult.hasErrors()){
 //            theModel.addAttribute("student",student);
             System.out.println(bindingResult.toString());
+            //Adding countryList to the Model if error occurs.
+            theModel.addAttribute("countries",countryList);
             return "Student/show-registration";
         }
         try{
@@ -82,9 +89,18 @@ public class StudentRestController {
         Student student=new Student();
         //Adding instance to Model
         theModel.addAttribute("student",student);
+        theModel.addAttribute("countries",countryList);
         return "Student/show-registration";
     }
 
+    //********************End Point for displaying each individual Student Profile.
+    @GetMapping("/view")
+    public String viewIndividualStudent(@RequestParam("studentId")Integer studentId,Model theModel){
+        Student student=studentService.findById(studentId);
+        //Adding student instance to the Model.
+        theModel.addAttribute("student",student);
+        return "Student/view-individual-student";
+    }
     //Update/Modify
     @GetMapping("/update")
     public String updateStudentDetails(@RequestParam("studentId") Integer studentId,Model theModel){

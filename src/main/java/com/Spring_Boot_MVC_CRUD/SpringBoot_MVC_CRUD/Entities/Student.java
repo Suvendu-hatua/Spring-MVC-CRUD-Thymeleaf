@@ -28,6 +28,22 @@ public class Student {
     @AssertTrue(message = "You must agree terms and conditions.")
     private boolean agreedToTerms=false;
 
+    @Size(min = 10,max = 10,message = "Phone Number must be of 10 digits only.")
+    @Column()
+    private String mobileNumber;
+
+    @Column
+    private String country;
+
+    @Column
+    @NotNull(message = "Gender is required!")
+    private String gender;
+
+
+
+
+    //Setter and Getter Methods-->
+
     public Integer getStudentId() {
         return studentId;
     }
@@ -69,6 +85,30 @@ public class Student {
         this.agreedToTerms = agreedToTerms;
     }
 
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     //Overriding toString() method
 
     @Override
@@ -78,6 +118,10 @@ public class Student {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", agreedToTerms=" + agreedToTerms +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", country='" + country + '\'' +
+                ", gender='" + gender + '\'' +
                 '}';
     }
 }
