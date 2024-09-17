@@ -52,12 +52,13 @@ public class StudentRestController {
         return "redirect:student-list";
     }
     @PostMapping("/save-update")
-    public String saveUpdateStudent(@Valid @ModelAttribute("student") Student student, BindingResult bindingResult){
+    public String saveUpdateStudent(@Valid @ModelAttribute("student") Student student, BindingResult bindingResult,Model theModel){
         System.out.println(student);
         Student stu=null;
         if(bindingResult.hasErrors()){
 //            theModel.addAttribute("student",student);
             System.out.println(bindingResult.toString());
+            theModel.addAttribute("countries",countryList);
             return "Student/update-details";
         }
         try{
@@ -105,8 +106,10 @@ public class StudentRestController {
     @GetMapping("/update")
     public String updateStudentDetails(@RequestParam("studentId") Integer studentId,Model theModel){
         Student student=studentService.findById(studentId);
+        System.out.println(student);
         //Adding student instance to the Model.
         theModel.addAttribute("student",student);
+        theModel.addAttribute("countries",countryList);
         return "Student/update-details";
     }
 

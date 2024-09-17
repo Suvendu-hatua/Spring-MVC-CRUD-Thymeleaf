@@ -7,14 +7,15 @@
 
     <!--    Adding CSS file to this html file-->
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <!--Adding CDN file of Font Awesome-->
+    <!--Adding CDN file of Font Awesome class="card-img-top"-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
         <div class="container mt-4">
             <h2 class="text-center text-primary-emphasis" th:text="'Profile Of '+${student.firstName}+' '+${student.lastName}"></h2>
-            <div class="card mx-auto mt-3" style="width: 22rem;">
-                <img th:src="@{/images/profile-user.jpg}" class="card-img-top" alt="...">
+            <div class="card mx-auto mt-3" style="width: 23rem;">
+                <img th:src="@{/images/profile-user.jpg}"  alt="..." style="width: 15rem; display:block; margin:auto;margin-left: auto;
+        margin-right: auto;">
                 <div class="card-body">
                     <h5 class="card-title text-center text-success" th:text="${student.gender=='Male'?'Mr. ':'Miss. '}+ ${student.firstName}+' '+${student.lastName}"></h5>
                     <div class="card-text">
@@ -25,8 +26,10 @@
                         <strong>Phone No: </strong><i class="fa-solid fa-phone-volume"></i> <span th:text="${student.mobileNumber}"></span>
                         <br>
                         <strong>Country: </strong><span th:text="${student.country}"></span>
+
                     </div>
-                    <p class="d-grid gap-2 mx-auto">
+
+                    <p class="d-grid gap-2 mx-auto pt-2">
                         <a th:href="@{/students/student-list}" class="btn btn-primary btn-sm"><i class="fa-solid fa-circle-left me-1"></i>Go Back</a>
                         <a th:href="@{/students/update(studentId=${student.studentId})}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square me-1"></i>Update</a>
                     </p>

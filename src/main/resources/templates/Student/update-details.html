@@ -44,8 +44,44 @@
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="${student.email}">
                 </div>
             </div>
+
+<!--            To update Phone Number and Country-->
+
+            <div class="mb-3">
+                <label for="mobileNo" class="form-label">Mobile Number</label>
+                <input type="number" class="form-control" id="mobileNo" name="mobileNumber" autocomplete="off" th:value="*{mobileNumber}"
+                       th:classappend="${#fields.hasErrors('mobileNumber')?'is-invalid':''}" placeholder="Enter Mobile Number">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('mobileNumber')}" th:errors="${student.mobileNumber}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <select id="country" class="form-select" name="country" aria-label="Default select example">
+                    <option >Open this select menu</option>
+                    <option th:each="country:${countries}" th:text="${country}" th:value="${country}" th:selected="${student.country==country?true:false}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3 visually-hidden">
+                <label for="gender" class="form-label">Gender</label>
+                <div  id="gender">
+                    <input class="form-check-input" type="radio" name="gender" id="male" th:value="Male" th:checked="${student.gender=='Male'?true:false}">
+                    <label class="form-check-label" for="male">
+                        Male
+                    </label>
+                    <input class="form-check-input ms-3" type="radio" name="gender" id="female" th:value="Female" th:checked="${student.gender=='Female'?true:false}">
+                    <label class="form-check-label" for="female">
+                        Female
+                    </label>
+                </div>
+                <div class="text-danger" th:if="${#fields.hasErrors('gender')}" th:errors="${student.gender}">
+                </div>
+            </div>
+
             <div class="mb-3 form-check visually-hidden">
-                <input type="checkbox" class="form-check-input" checked id="exampleCheck1" name="agreedToTerms" th:classappend="${#fields.hasErrors('agreedToTerms')?'is-invalid':''}">
+                <input type="checkbox" class="form-check-input"  id="exampleCheck1" name="agreedToTerms"
+                      th:checked="${student.agreedToTerms}" th:classappend="${#fields.hasErrors('agreedToTerms')?'is-invalid':''}">
                 <label class="form-check-label" for="exampleCheck1">Please accept terms and conditions.</label>
 
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('agreedToTerms')}" th:errors="${student.agreedToTerms}">
